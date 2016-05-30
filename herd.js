@@ -4,6 +4,11 @@
 //
 // listen for resize
    // https://jsfiddle.net/jaredwilli/qFuDr/
+//
+var BACKGROUND_COLOR = '#fff' ;  // white
+var MY_COLOR = "#3E3";           // green
+var NOT_MY_COLOR = "#000" ;      // black
+//
 var c = document . getElementById( 'myCanvas' ) ;
 window.addEventListener('resize', resizeCanvas, false); 
 //
@@ -31,9 +36,6 @@ var MAXV  =   20.0  ;
 //
 var MY_X = WIDTH  / 2 ;
 var MY_Y = HEIGHT / 2 ;
-//
-var MY_COLOR = "#3E3"; // green
-var NOT_MY_COLOR = "#FFFF00" ; // yellow
 //
 var M_PI = Math.PI ;
 //
@@ -649,7 +651,7 @@ function drawwildebeest()
    for( j=0 ; j<NUMWB ; j++ )
    {
       //
-      var size_inc = (j == 0) ? 2.0 : 1.6;
+      var size_inc = (j == 0) ? 1.6 : 1.0;
       //
       color = arr[j] . color;
       //
@@ -661,10 +663,10 @@ function drawwildebeest()
       //
       drawarrow( x , y , t , R , color, size_inc ) ;
       //
-      gx = ( x > 0.5 * HEIGHT ) ? x - HEIGHT : x + HEIGHT ; // ghost point
+      gx = ( x > 0.5 * WIDTH ) ? x - WIDTH : x + WIDTH ; // ghost point
       gy = ( y > 0.5 * HEIGHT ) ? y - HEIGHT : y + HEIGHT ;
       //
-      avar = x - 1.5 * R < 0 || x + 1.5 * R >= HEIGHT ;
+      avar = x - 1.5 * R < 0 || x + 1.5 * R >= WIDTH ;
       bvar = y - 1.5 * R < 0 || y + 1.5 * R >= HEIGHT ;
       //
       if( avar )
@@ -745,7 +747,7 @@ function nbrswildebeest()
             //
             rx   = arr[k].x ;
             ry   = arr[k].y ;
-            gx   = ( rx > 0.5 * HEIGHT ) ? rx - HEIGHT : rx + HEIGHT ;
+            gx   = ( rx > 0.5 * WIDTH ) ? rx - WIDTH : rx + WIDTH ;
             gy   = ( ry > 0.5 * HEIGHT ) ? ry - HEIGHT : ry + HEIGHT ;
             //
             x2   = rx ;
@@ -866,14 +868,12 @@ function tick()
    //
    nbrswildebeest();
    //
-   ctx . fillStyle = '#000000' ; // black
+   ctx . fillStyle = BACKGROUND_COLOR ;
    ctx . fillRect( 0 , 0 , c.width , c.height ) ;
    //
    drawwildebeest() ;
    drawnbrs() ;
    //
-   ctx . fillStyle = '#000000' ; // black
-   ctx . fillRect( HEIGHT , 0 , WIDTH, HEIGHT ) ;
    //
    //
    setTimeout( 'tick()' , 10 ) ;
