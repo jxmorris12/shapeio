@@ -164,7 +164,7 @@ function movewildebeest()
    //
    var    coinflip;
    //
-   for( j=0 ; j<NUMWB ; j++ )
+   for( j=1 ; j<NUMWB ; j++ )
    {
       //
       arr[j].t += arr[j].dt ;
@@ -188,7 +188,7 @@ function movewildebeest()
       //
    }
    //
-   for( j=0 ; j<NUMWB ; j++ )
+   for( j=1 ; j<NUMWB ; j++ )
    {
       //
       brr[j].total++;
@@ -539,6 +539,40 @@ function movewildebeest()
       }
    }
 } 
+//
+var SPEED_INC = 1.5;
+var TURN_INC = 0.02;
+//
+var PLAYER_SPEED_LIMIT = 50.0;
+//
+function moveplayer() {
+   // adjust velocity
+   if( KEY_PRESSED . UP ) {
+      arr[0] . v += SPEED_INC;
+   } else if( KEY_PRESSED . DOWN ) {
+      arr[0] . v -= SPEED_INC;
+   }
+   // wrap speed
+   if(arr[0] . v < 0) {
+      arr[0] . v = 0;
+   } else if( arr[0] . v > PLAYER_SPEED_LIMIT ) {
+      arr[0] . v = PLAYER_SPEED_LIMIT;
+   }
+   // adjust direction
+   if( KEY_PRESSED . LEFT ) {
+      arr[0] . t -= TURN_INC;
+   } else if( KEY_PRESSED . RIGHT ) {
+      arr[0] . t += TURN_INC;
+   }
+   // move (same as in movewildebeest () )
+   arr[0].x  += DT * arr[0].v * cos( arr[0].t ) ;
+   arr[0].y  += DT * arr[0].v * sin( arr[0].t ) ;
+   //
+   if( arr[0].x > WIDTH  ) arr[0].x -= WIDTH  ; // wrap
+   if( arr[0].x < 0.0    ) arr[0].x += WIDTH  ;
+   if( arr[0].y > HEIGHT ) arr[0].y -= HEIGHT ; // wrap
+   if( arr[0].y < 0.0    ) arr[0].y += HEIGHT ;
+}
 // 
 function drawONEwildebeest( x , y , t , R , color )
 {
@@ -822,6 +856,8 @@ function tick()
    var j = 0 ;
    //
    movewildebeest();
+   //
+   moveplayer();
    //
    nbrswildebeest();
    //
