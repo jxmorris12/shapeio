@@ -18,8 +18,7 @@ function resizeCanvas() {
 }
 //
 // constants
-// var WIDTH  = 1500 ;
-// var HEIGHT = 1000 ;
+// 
 resizeCanvas();
 //
 var ARROW_SIZE = 0.4;
@@ -29,7 +28,6 @@ var NUMWB =  050    ;
 var DT    =    0.05 ;
 var MINV  =   10.0  ;
 var MAXV  =   20.0  ;
-var CYCLE = 3000    ;
 //
 var MY_X = WIDTH  / 2 ;
 var MY_Y = HEIGHT / 2 ;
@@ -823,23 +821,6 @@ function tick()
 {
    var j = 0 ;
    //
-   cycle++;
-   //
-   if( cycle == CYCLE )
-   {
-      cycle = 0 ;
-      //
-      radiu -= 5.0 ; // 20 15 10 30 25 20 15 10 30...
-      //
-      if( radiu < 7.5 ) radiu = 30.0 ;
-      //
-      for( j=0 ; j<NUMWB ; j++ )
-      {
-         arr[j].r = radiu ;
-      }
-      //
-   }
-   //
    movewildebeest();
    //
    nbrswildebeest();
@@ -862,8 +843,6 @@ function initwildebeest()
    var j ;
    var k ;
    //
-   cycle = 0 ;
-   //
    j = 0 ;
    //
    while( j < NUMWB )
@@ -877,6 +856,8 @@ function initwildebeest()
          //
          arr[j].color = MY_COLOR;
          //
+         arr[j].t     = 0;
+         arr[j].v     = 0;
       } else {
          // not me
          arr[j].x     = myrandrange( 0.0  , WIDTH * 2 ) ;
@@ -884,10 +865,10 @@ function initwildebeest()
          //
          arr[j].color = NOT_MY_COLOR;
          //
+         arr[j].t     = myrandrange( 0.0  , 2.0 * M_PI ) ;
+         arr[j].v     = 0;
+         //
       }
-      //
-      arr[j].t     = myrandrange( 0.0  , 2.0 * M_PI ) ;
-      arr[j].v     = 0;
       //
       arr[j].dt    = myrandrange( -1.0/24.0 * M_PI , 1.0/24.0 * M_PI ) ;
       arr[j].dv    = myrandrange( -1.0 , 1.0 ) ;
@@ -937,8 +918,6 @@ var near = new Array() ;
 //
 var cc = new Array() ;
 var cn = new Array() ;
-//
-var cycle ;
 //
 var radiu = 20.0 ;
 //
