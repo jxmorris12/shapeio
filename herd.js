@@ -619,10 +619,10 @@ function drawwildebeest()
       //
       drawONEwildebeest( x , y , t , R , color ) ;
       //
-      gx = ( x > 0.5 * HEIGHT ) ? x - WIDTH : x + HEIGHT ; // ghost point
+      gx = ( x > 0.5 * HEIGHT ) ? x - HEIGHT : x + HEIGHT ; // ghost point
       gy = ( y > 0.5 * HEIGHT ) ? y - HEIGHT : y + HEIGHT ;
       //
-      avar = x - 1.5 * R < 0 || x + 1.5 * R >= WIDTH ;
+      avar = x - 1.5 * R < 0 || x + 1.5 * R >= HEIGHT ;
       bvar = y - 1.5 * R < 0 || y + 1.5 * R >= HEIGHT ;
       //
       if( avar )
@@ -844,6 +844,10 @@ function tick()
    //
    drawwildebeest() ;
    drawnbrs() ;
+   //
+   ctx . fillStyle = '#000000' ; // black
+   ctx . fillRect( HEIGHT , 0 , WIDTH, HEIGHT ) ;
+   //
    //
    setTimeout( 'tick()' , 10 ) ;
 }
