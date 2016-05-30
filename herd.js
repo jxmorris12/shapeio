@@ -22,6 +22,9 @@ function resizeCanvas() {
 // var HEIGHT = 1000 ;
 resizeCanvas();
 //
+var ARROW_SIZE = 0.4;
+var DEFAULT_ARROW_SIZE = 0.4;
+//
 var NUMWB =  050    ;
 var DT    =    0.05 ;
 var MINV  =   10.0  ;
@@ -549,26 +552,28 @@ function drawONEwildebeest( x , y , t , R , color )
    var x6,y6;
    var x7,y7;
    //
-   x1 = x + 0.4 * R * cos( t + 0.5 * M_PI ) + 1.2 * R * cos( t + M_PI ) ;
-   y1 = y + 0.4 * R * sin( t + 0.5 * M_PI ) + 1.2 * R * sin( t + M_PI ) ;
+   // arrow shape
    //
-   x2 = x + 0.4 * R * cos( t + 0.5 * M_PI )                             ;
-   y2 = y + 0.4 * R * sin( t + 0.5 * M_PI )                             ;
+   x1 = x + ARROW_SIZE * R * cos( t + 0.5 * M_PI ) + (ARROW_SIZE * 3) * R * cos( t + M_PI ) ;
+   y1 = y + ARROW_SIZE * R * sin( t + 0.5 * M_PI ) + (ARROW_SIZE * 3) * R * sin( t + M_PI ) ;
    //
-   x3 = x + 1.0 * R * cos( t + 0.5 * M_PI )                             ;
-   y3 = y + 1.0 * R * sin( t + 0.5 * M_PI )                             ;
+   x2 = x + ARROW_SIZE * R * cos( t + 0.5 * M_PI )                             ;
+   y2 = y + ARROW_SIZE * R * sin( t + 0.5 * M_PI )                             ;
    //
-   x4 = x +       R * cos( t              )                             ;
-   y4 = y +       R * sin( t              )                             ;
+   x3 = x + (ARROW_SIZE * 2.5) * R * cos( t + 0.5 * M_PI )                     ;
+   y3 = y + (ARROW_SIZE * 2.5) * R * sin( t + 0.5 * M_PI )                     ;
    //
-   x5 = x + 1.0 * R * cos( t - 0.5 * M_PI )                             ;
-   y5 = y + 1.0 * R * sin( t - 0.5 * M_PI )                             ;
+   x4 = x +       R * cos( t              ) * (ARROW_SIZE / DEFAULT_ARROW_SIZE);
+   y4 = y +       R * sin( t              ) * (ARROW_SIZE / DEFAULT_ARROW_SIZE);
    //
-   x6 = x + 0.4 * R * cos( t - 0.5 * M_PI )                             ;
-   y6 = y + 0.4 * R * sin( t - 0.5 * M_PI )                             ;
+   x5 = x + (ARROW_SIZE * 2.5) * R * cos( t - 0.5 * M_PI )                     ;
+   y5 = y + (ARROW_SIZE * 2.5) * R * sin( t - 0.5 * M_PI )                     ;
    //
-   x7 = x + 0.4 * R * cos( t - 0.5 * M_PI ) + 1.2 * R * cos( t + M_PI ) ;
-   y7 = y + 0.4 * R * sin( t - 0.5 * M_PI ) + 1.2 * R * sin( t + M_PI ) ;
+   x6 = x + ARROW_SIZE * R * cos( t - 0.5 * M_PI )                             ;
+   y6 = y + ARROW_SIZE * R * sin( t - 0.5 * M_PI )                             ;
+   //
+   x7 = x + ARROW_SIZE * R * cos( t - 0.5 * M_PI ) + (ARROW_SIZE * 3) * R * cos( t + M_PI ) ;
+   y7 = y + ARROW_SIZE * R * sin( t - 0.5 * M_PI ) + (ARROW_SIZE * 3) * R * sin( t + M_PI ) ;
    //
    //
    //
@@ -609,7 +614,7 @@ function drawwildebeest()
    for( j=0 ; j<NUMWB ; j++ )
    {
       //
-      color = arr[j].color;
+      color = arr[j] . color;
       //
       if( nbrs[ j * NUMWB + near[j] ] == 1 ) color = "#FF0000" ; // red
       //
