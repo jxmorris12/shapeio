@@ -574,7 +574,7 @@ function moveplayer() {
    if( arr[0].y < 0.0    ) arr[0].y += HEIGHT ;
 }
 // 
-function drawONEwildebeest( x , y , t , R , color )
+function drawarrow( x , y , t , R , color, inc )
 {
    var x1,y1;
    var x2,y2;
@@ -583,29 +583,32 @@ function drawONEwildebeest( x , y , t , R , color )
    var x5,y5;
    var x6,y6;
    var x7,y7;
+   // change size
+   var THIS_ARROW_SIZE = ARROW_SIZE;
+   if( inc ) THIS_ARROW_SIZE *= inc;
    //
    // arrow shape
    //
-   x1 = x + ARROW_SIZE * R * cos( t + 0.5 * M_PI ) + (ARROW_SIZE * 3) * R * cos( t + M_PI ) ;
-   y1 = y + ARROW_SIZE * R * sin( t + 0.5 * M_PI ) + (ARROW_SIZE * 3) * R * sin( t + M_PI ) ;
+   x1 = x + THIS_ARROW_SIZE * R * cos( t + 0.5 * M_PI ) + (THIS_ARROW_SIZE * 3) * R * cos( t + M_PI ) ;
+   y1 = y + THIS_ARROW_SIZE * R * sin( t + 0.5 * M_PI ) + (THIS_ARROW_SIZE * 3) * R * sin( t + M_PI ) ;
    //
-   x2 = x + ARROW_SIZE * R * cos( t + 0.5 * M_PI )                             ;
-   y2 = y + ARROW_SIZE * R * sin( t + 0.5 * M_PI )                             ;
+   x2 = x + THIS_ARROW_SIZE * R * cos( t + 0.5 * M_PI )                             ;
+   y2 = y + THIS_ARROW_SIZE * R * sin( t + 0.5 * M_PI )                             ;
    //
-   x3 = x + (ARROW_SIZE * 2.5) * R * cos( t + 0.5 * M_PI )                     ;
-   y3 = y + (ARROW_SIZE * 2.5) * R * sin( t + 0.5 * M_PI )                     ;
+   x3 = x + (THIS_ARROW_SIZE * 2.5) * R * cos( t + 0.5 * M_PI )                     ;
+   y3 = y + (THIS_ARROW_SIZE * 2.5) * R * sin( t + 0.5 * M_PI )                     ;
    //
-   x4 = x +       R * cos( t              ) * (ARROW_SIZE / DEFAULT_ARROW_SIZE);
-   y4 = y +       R * sin( t              ) * (ARROW_SIZE / DEFAULT_ARROW_SIZE);
+   x4 = x + R * cos( t ) * (THIS_ARROW_SIZE / DEFAULT_ARROW_SIZE);
+   y4 = y + R * sin( t ) * (THIS_ARROW_SIZE / DEFAULT_ARROW_SIZE);
    //
-   x5 = x + (ARROW_SIZE * 2.5) * R * cos( t - 0.5 * M_PI )                     ;
-   y5 = y + (ARROW_SIZE * 2.5) * R * sin( t - 0.5 * M_PI )                     ;
+   x5 = x + (THIS_ARROW_SIZE * 2.5) * R * cos( t - 0.5 * M_PI )                     ;
+   y5 = y + (THIS_ARROW_SIZE * 2.5) * R * sin( t - 0.5 * M_PI )                     ;
    //
-   x6 = x + ARROW_SIZE * R * cos( t - 0.5 * M_PI )                             ;
-   y6 = y + ARROW_SIZE * R * sin( t - 0.5 * M_PI )                             ;
+   x6 = x + THIS_ARROW_SIZE * R * cos( t - 0.5 * M_PI )                             ;
+   y6 = y + THIS_ARROW_SIZE * R * sin( t - 0.5 * M_PI )                             ;
    //
-   x7 = x + ARROW_SIZE * R * cos( t - 0.5 * M_PI ) + (ARROW_SIZE * 3) * R * cos( t + M_PI ) ;
-   y7 = y + ARROW_SIZE * R * sin( t - 0.5 * M_PI ) + (ARROW_SIZE * 3) * R * sin( t + M_PI ) ;
+   x7 = x + THIS_ARROW_SIZE * R * cos( t - 0.5 * M_PI ) + (THIS_ARROW_SIZE * 3) * R * cos( t + M_PI ) ;
+   y7 = y + THIS_ARROW_SIZE * R * sin( t - 0.5 * M_PI ) + (THIS_ARROW_SIZE * 3) * R * sin( t + M_PI ) ;
    //
    //
    //
@@ -646,6 +649,8 @@ function drawwildebeest()
    for( j=0 ; j<NUMWB ; j++ )
    {
       //
+      var size_inc = (j == 0) ? 2.0 : 1.6;
+      //
       color = arr[j] . color;
       //
       if( nbrs[ j * NUMWB + near[j] ] == 1 ) color = "#FF0000" ; // red
@@ -654,7 +659,7 @@ function drawwildebeest()
       y  = arr[j].y ;
       t  = arr[j].t ;
       //
-      drawONEwildebeest( x , y , t , R , color ) ;
+      drawarrow( x , y , t , R , color, size_inc ) ;
       //
       gx = ( x > 0.5 * HEIGHT ) ? x - HEIGHT : x + HEIGHT ; // ghost point
       gy = ( y > 0.5 * HEIGHT ) ? y - HEIGHT : y + HEIGHT ;
@@ -664,15 +669,15 @@ function drawwildebeest()
       //
       if( avar )
       {
-         drawONEwildebeest( gx ,  y , t , R , color ) ;
+         drawarrow( gx ,  y , t , R , color, size_inc ) ;
       }
       if( bvar )
       {
-         drawONEwildebeest(  x , gy , t , R , color ) ;
+         drawarrow(  x , gy , t , R , color, size_inc ) ;
       }
       if( avar && bvar )
       {
-         drawONEwildebeest( gx , gy , t , R , color ) ;
+         drawarrow( gx , gy , t , R , color, size_inc ) ;
       }
    }
 } 
