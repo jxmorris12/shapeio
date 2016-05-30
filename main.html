@@ -1,7 +1,16 @@
 <!doctype html>
-<body>
-  Hello
-  <div id="dbg"></div>
-  <canvas id="myCanvas" width=1500 height=1000>Your browser does not support the HTML5 canvas tag.</canvas>
-  <script src="herd.js"></script>
+<body style="margin:0">
+  <canvas class="fullscreen" id="myCanvas" width=1500 height=1000>Your browser does not support the HTML5 canvas tag.</canvas>
+  <script class="fullscreen" src="herd.js"></script>
+  <style type="text/css">
+    .fullscreen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
 </body>

@@ -1,14 +1,38 @@
 //
-// Torbert, April 2014
+// created by Jack Morris, May 2016
+// adapted from Torbert, April 2014
 //
-var WIDTH  = 1500 ;
-var HEIGHT = 1000 ;
+// listen for resize
+   // https://jsfiddle.net/jaredwilli/qFuDr/
+var c = document . getElementById( 'myCanvas' ) ;
+window.addEventListener('resize', resizeCanvas, false); 
 //
-var NUMWB =  150    ;
+function resizeCanvas() {
+   //
+   c.width = window.innerWidth;
+   c.height = window.innerHeight;
+   //
+   WIDTH  = c.width;
+   HEIGHT = c.height;
+   //
+}
+//
+// constants
+// var WIDTH  = 1500 ;
+// var HEIGHT = 1000 ;
+resizeCanvas();
+//
+var NUMWB =  050    ;
 var DT    =    0.05 ;
 var MINV  =   10.0  ;
 var MAXV  =   20.0  ;
 var CYCLE = 3000    ;
+//
+var MY_X = WIDTH  / 2 ;
+var MY_Y = HEIGHT / 2 ;
+//
+var MY_COLOR = "#3E3"; // green
+var NOT_MY_COLOR = "#FFFF00" ; // yellow
 //
 var M_PI = Math.PI ;
 //
@@ -156,8 +180,8 @@ function movewildebeest()
       arr[j].x  += DT * arr[j].v * cos( arr[j].t ) ;
       arr[j].y  += DT * arr[j].v * sin( arr[j].t ) ;
       //
-      if( arr[j].x > HEIGHT ) arr[j].x -= HEIGHT ; // wrap
-      if( arr[j].x < 0.0    ) arr[j].x += HEIGHT ;
+      if( arr[j].x > WIDTH  ) arr[j].x -= WIDTH  ; // wrap
+      if( arr[j].x < 0.0    ) arr[j].x += WIDTH  ;
       if( arr[j].y > HEIGHT ) arr[j].y -= HEIGHT ; // wrap
       if( arr[j].y < 0.0    ) arr[j].y += HEIGHT ;
       //
@@ -585,7 +609,7 @@ function drawwildebeest()
    for( j=0 ; j<NUMWB ; j++ )
    {
       //
-      color = "#FFFF00" ; // yellow
+      color = arr[j].color;
       //
       if( nbrs[ j * NUMWB + near[j] ] == 1 ) color = "#FF0000" ; // red
       //
@@ -595,10 +619,10 @@ function drawwildebeest()
       //
       drawONEwildebeest( x , y , t , R , color ) ;
       //
-      gx = ( x > 0.5 * HEIGHT ) ? x - HEIGHT : x + HEIGHT ; // ghost point
+      gx = ( x > 0.5 * HEIGHT ) ? x - WIDTH : x + HEIGHT ; // ghost point
       gy = ( y > 0.5 * HEIGHT ) ? y - HEIGHT : y + HEIGHT ;
       //
-      avar = x - 1.5 * R < 0 || x + 1.5 * R >= HEIGHT ;
+      avar = x - 1.5 * R < 0 || x + 1.5 * R >= WIDTH ;
       bvar = y - 1.5 * R < 0 || y + 1.5 * R >= HEIGHT ;
       //
       if( avar )
@@ -815,25 +839,11 @@ function tick()
    //
    nbrswildebeest();
    //
-   // var dbg = document . getElementById( 'dbg' ) ;
-   // var dbgStr = "" ;
-   // dbgStr = dbgStr.concat( "<h1>" , x[0].toString() , "</h1>" );
-   // dbg . innerHTML = dbgStr ;
-   //
    ctx . fillStyle = '#000000' ; // black
    ctx . fillRect( 0 , 0 , c.width , c.height ) ;
    //
    drawwildebeest() ;
    drawnbrs() ;
-   //
-   ctx . fillStyle = '#000000' ; // black
-   ctx . fillRect( HEIGHT , 0 , WIDTH - HEIGHT , HEIGHT ) ;
-   //
-   ctx . strokeStyle = '#FFFFFF' ; // white
-   ctx . strokeRect( 0      , 0         , WIDTH - 1      , HEIGHT - 1 ) ;
-   ctx . strokeRect( HEIGHT , 0         , WIDTH - HEIGHT , HEIGHT / 2 ) ;
-   ctx . strokeRect( HEIGHT , HEIGHT / 2, WIDTH - HEIGHT , HEIGHT / 2 ) ;
-   //
    //
    setTimeout( 'tick()' , 10 ) ;
 }
@@ -851,11 +861,24 @@ function initwildebeest()
    {
       arr[j] = new Wildebeest() ;
       //
-      arr[j].x     = myrandrange( 0.0  , HEIGHT ) ;
-      arr[j].y     = myrandrange( 0.0  , HEIGHT ) ;
+      if(j == 0) {
+         // me
+         arr[j].x = MY_X;
+         arr[j].y = MY_Y;
+         //
+         arr[j].color = MY_COLOR;
+         //
+      } else {
+         // not me
+         arr[j].x     = myrandrange( 0.0  , WIDTH * 2 ) ;
+         arr[j].y     = myrandrange( 0.0  , HEIGHT ) ;
+         //
+         arr[j].color = NOT_MY_COLOR;
+         //
+      }
       //
       arr[j].t     = myrandrange( 0.0  , 2.0 * M_PI ) ;
-      arr[j].v     = myrandrange( MINV , MAXV ) ;
+      arr[j].v     = 0;
       //
       arr[j].dt    = myrandrange( -1.0/24.0 * M_PI , 1.0/24.0 * M_PI ) ;
       arr[j].dv    = myrandrange( -1.0 , 1.0 ) ;
@@ -883,7 +906,6 @@ function initwildebeest()
    }
 }
 //
-var c = document . getElementById( 'myCanvas' ) ;
 var ctx = c . getContext( '2d' ) ;
 //
 var n = 4 ;
@@ -916,7 +938,7 @@ var yp = new Array() ;
 //
 initwildebeest() ;
 //
-setTimeout( 'tick()' , 10 ) ;
+setTimeout( 'tick()' , 1 ) ;
 //
 // end of file
 //
