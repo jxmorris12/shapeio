@@ -6,8 +6,12 @@
    // https://jsfiddle.net/jaredwilli/qFuDr/
 //
 var BACKGROUND_COLOR = '#fff' ;  // white
-var MY_COLOR = "#3E3";           // green
+var MY_COLOR = "blue";           //
 var NOT_MY_COLOR = "#000" ;      // black
+var ANGRY_COLOR = 'red';
+//
+var NORMAL_LINE = 'yellow';
+var ANGRY_LINE = 'red';
 //
 var c = document . getElementById( 'myCanvas' ) ;
 window.addEventListener('resize', resizeCanvas, false); 
@@ -655,7 +659,7 @@ function drawwildebeest()
       //
       color = arr[j] . color;
       //
-      if( nbrs[ j * NUMWB + near[j] ] == 1 ) color = "#FF0000" ; // red
+      if( nbrs[ j * NUMWB + near[j] ] == 1 ) color = ANGRY_COLOR ;
       //
       x  = arr[j].x ;
       y  = arr[j].y ;
@@ -829,11 +833,11 @@ function drawnbrs()
          if( nbrs[ j * NUMWB + k ] > 0 )
          {
             //
-            color = "#FFFF00" ; // yellow
+            color = NOT_MY_COLOR ; // yellow
             //
             if( nbrs[ j * NUMWB + k ] == 1 )
             {
-               color = "#FF0000" ; // red
+               color = ANGRY_COLOR ;
             }
             else if( nbrs[ j * NUMWB + near[j] ] == 1 ) // we are angry
             {
@@ -855,6 +859,83 @@ function drawnbrs()
       //
    }
 } 
+function updatestats() {
+   var j ;
+   //
+   var alone = 0 ;
+   var angry = 0 ;
+   var other = 0 ;
+   var total = 0 ;
+   //
+   var x ;
+   var y ;
+   //
+   var num = 0 ; // label for cc
+   //
+   var a ;   // bubble sort
+   var b ;
+   var tmp ;
+   //
+   var rmax ;
+   var r1   ;
+   var r2   ;
+   var jinc ;
+   //
+   for( j=0 ; j<NUMWB ; j++ )
+   {
+      //
+      if( nbrs[ j * NUMWB + near[j] ] == 0 )
+      {
+         alone++ ;
+      }
+      else if( nbrs[ j * NUMWB + near[j] ] == 1 )
+      {
+         angry++ ;
+      }
+      else
+      {
+         other++ ;
+      }
+      //
+      total++ ;
+      //
+      cc[j] = -1 ;
+      //
+      cn[j] = 0 ;
+      //
+   }
+   //
+   for( j=0 ; j<NUMWB ; j++ )
+   {
+      if( cc[j] == -1 && nbrs[ j * NUMWB + near[j] ] == 2 )
+      {
+         floodfill(j,num) ;
+         //
+         if( cn[num] == 1 ) // everyone we're connected to is angry
+         {
+            other--;
+            //
+            alone++;
+         }
+         else
+         {
+            num++;
+         }
+      }
+   }
+   //
+   for( a = 0 ; a < num - 1 ; a++ ) {
+      for( b = 0 ; b < num - a - 1 ; b++ ) {
+         if( cn[b] > cn[b+1] )
+         {
+            tmp = cn[b];
+            cn[b] = cn[b+1];
+            cn[b+1] = tmp;
+         }
+      }
+   }
+   //
+}
 //
 // http://www.htmlgoodies.com/beyond/javascript/article.php/3709486
 //
@@ -873,6 +954,10 @@ function tick()
    //
    drawwildebeest() ;
    drawnbrs() ;
+   //
+   updatestats() ;
+   // reset score label
+   document.getElementById('score-label').text = '0';
    //
    //
    //
