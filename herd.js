@@ -552,24 +552,14 @@ var TURN_INC = 0.02;
 var PLAYER_SPEED_LIMIT = 50.0;
 //
 function moveplayer() {
+   // coords
+   var ax = arr [0] . x;
+   var ay = arr [0] . y;
    // adjust velocity
-   if( KEY_PRESSED . UP ) {
-      arr[0] . v += SPEED_INC;
-   } else if( KEY_PRESSED . DOWN ) {
-      arr[0] . v -= SPEED_INC;
-   }
-   // wrap speed
-   if(arr[0] . v < 0) {
-      arr[0] . v = 0;
-   } else if( arr[0] . v > PLAYER_SPEED_LIMIT ) {
-      arr[0] . v = PLAYER_SPEED_LIMIT;
-   }
+   arr [0] . v = get_mouse_v( ax, ay );
    // adjust direction
-   if( KEY_PRESSED . LEFT ) {
-      arr[0] . t -= TURN_INC;
-   } else if( KEY_PRESSED . RIGHT ) {
-      arr[0] . t += TURN_INC;
-   }
+   arr [0] . t = get_mouse_t( ax, ay );
+   // @TODO adjust DT ?
    // move (same as in movewildebeest () )
    arr[0].x  += DT * arr[0].v * cos( arr[0].t ) ;
    arr[0].y  += DT * arr[0].v * sin( arr[0].t ) ;
@@ -635,6 +625,27 @@ function drawarrow( x , y , t , R , color, inc )
    //
    poly( c , xp , yp , 7 , color ) ; 
 }
+// draw a circle on canvas
+   // thanks http://www.w3schools.com/tags/canvas_arc.asp
+function drawcircle( x, y, R, color ) {
+
+   var ctx = myCanvas . getContext( '2d' ) ;
+   //
+   ctx . strokeStyle = color ;
+   ctx . fillStyle   = color ;
+   //
+   ctx . arc ( x , y , R , 0 , 2 * M_PI );
+   //
+   ctx . fill() ;
+} 
+//
+function drawshape(j , x, y, t, R, color, size_inc ) {
+   if ( j != 0 ) {
+      drawarrow( x , y, t , R , color , size_inc );
+   } else {
+      drawcircle( x, y , R, color );
+   }
+}
 // 
 function drawwildebeest()
 {
@@ -665,7 +676,7 @@ function drawwildebeest()
       y  = arr[j].y ;
       t  = arr[j].t ;
       //
-      drawarrow( x , y , t , R , color, size_inc ) ;
+      drawshape( j , x , y  , t , R , color , size_inc );
       //
       gx = ( x > 0.5 * WIDTH ) ? x - WIDTH : x + WIDTH ; // ghost point
       gy = ( y > 0.5 * HEIGHT ) ? y - HEIGHT : y + HEIGHT ;
@@ -675,15 +686,15 @@ function drawwildebeest()
       //
       if( avar )
       {
-         drawarrow( gx ,  y , t , R , color, size_inc ) ;
+         drawshape( j , gx ,  y , t , R , color, size_inc ) ;
       }
       if( bvar )
       {
-         drawarrow(  x , gy , t , R , color, size_inc ) ;
+         drawshape(  j , x , gy , t , R , color, size_inc ) ;
       }
       if( avar && bvar )
       {
-         drawarrow( gx , gy , t , R , color, size_inc ) ;
+         drawshape( j , gx , gy , t , R , color, size_inc ) ;
       }
    }
 } 
