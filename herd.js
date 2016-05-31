@@ -107,10 +107,10 @@ function Stats()
 //
 function poly( canvas , x , y , n , color )
 {
-   var ctx = canvas . getContext( '2d' ) ;
+   console.log(' arrow color ', color);
    //
-   ctx . strokeStyle = color ;
-   ctx . fillStyle   = color ;
+   changestrokestyle( color );
+   changefillstyle ( color );
    //
    var j ;
    //
@@ -133,10 +133,9 @@ function poly( canvas , x , y , n , color )
 //
 function line( canvas , x1 , y1 , x2 , y2 , color )
 {
-   var ctx = canvas . getContext( '2d' ) ;
    //
-   ctx . strokeStyle = color ;
-   ctx . fillStyle   = color ;
+   changestrokestyle ( color ) ;
+   changefillstyle ( color );
    //
    ctx . beginPath() ;
    //
@@ -151,24 +150,24 @@ function line( canvas , x1 , y1 , x2 , y2 , color )
 //
 function movewildebeest()
 {
-   var    j,k,i;
-   var    count;
+   var j,k,i;
+   var count;
    //
    var dxavg;
    var dyavg;
    //
    var dx,dy;
    //
-   var    quad1;
-   var    quad2;
+   var quad1;
+   var quad2;
    //
    var tavg;
    var vavg;
    //
-   var    turnleft;
-   var    slowdown;
+   var turnleft;
+   var slowdown;
    //
-   var    coinflip;
+   var coinflip;
    //
    for( j=1 ; j<NUMWB ; j++ )
    {
@@ -627,23 +626,25 @@ function drawarrow( x , y , t , R , color, inc )
 }
 // draw a circle on canvas
    // thanks http://www.w3schools.com/tags/canvas_arc.asp
-function drawcircle( x, y, R, color ) {
-
-   var ctx = myCanvas . getContext( '2d' ) ;
+function drawcircle( cx, cy, R, color ) {
    //
-   ctx . strokeStyle = color ;
-   ctx . fillStyle   = color ;
+   ctx = myCanvas . getContext( '2d' ) ;
    //
-   ctx . arc ( x , y , R , 0 , 2 * M_PI );
+   changestrokestyle ( color ) ;
+   changefillstyle ( color ) ;
+   //
+   ctx . arc ( cx , cy , R , 0 , 2 * M_PI );
+   //
+   ctx . closePath();
    //
    ctx . fill() ;
 } 
 //
-function drawshape(j , x, y, t, R, color, size_inc ) {
+function drawshape(j , sx, sy, t, R, color, size_inc ) {
    if ( j != 0 ) {
-      drawarrow( x , y, t , R , color , size_inc );
+      drawarrow( sx , sy, t , R , color , size_inc );
    } else {
-      drawcircle( x, y , R, color );
+      drawcircle( sx, sy , R, color );
    }
 }
 // 
@@ -655,7 +656,8 @@ function drawwildebeest()
    var y;
    var t;
    //
-   var R = 8.0;
+   var R = 5.0;
+   var inc = 2.0; // arrow size inc from default R
    //
    var gx ;
    var gy ;
@@ -666,7 +668,7 @@ function drawwildebeest()
    for( j=0 ; j<NUMWB ; j++ )
    {
       //
-      var size_inc = (j == 0) ? 1.6 : 1.0;
+      var size_inc = (j == 0) ? inc : 1.0;
       //
       color = arr[j] . color;
       //
@@ -690,7 +692,7 @@ function drawwildebeest()
       }
       if( bvar )
       {
-         drawshape(  j , x , gy , t , R , color, size_inc ) ;
+         drawshape( j , x , gy , t , R , color, size_inc ) ;
       }
       if( avar && bvar )
       {
@@ -960,7 +962,7 @@ function tick()
    //
    nbrswildebeest();
    //
-   ctx . fillStyle = BACKGROUND_COLOR ;
+   changefillstyle ( BACKGROUND_COLOR ) ;
    ctx . fillRect( 0 , 0 , c.width , c.height ) ;
    //
    drawwildebeest() ;
@@ -1033,6 +1035,18 @@ function initwildebeest()
    }
 }
 //
+function changefillstyle ( color ) {
+   if( ctx . fillStyle != color ) {
+      ctx . fillStyle = color;
+   }
+}
+//
+function changestrokestyle ( color ) {
+   if( ctx . strokeStyle != color ) {
+      ctx . strokeStyle = color;
+   }
+}
+//
 var ctx = c . getContext( '2d' ) ;
 //
 var n = 4 ;
@@ -1063,7 +1077,7 @@ var yp = new Array() ;
 //
 initwildebeest() ;
 //
-setTimeout( 'tick()' , 1 ) ;
+setTimeout( 'tick()' , 10 ) ;
 //
 // end of file
 //
