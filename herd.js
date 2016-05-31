@@ -107,7 +107,6 @@ function Stats()
 //
 function poly( canvas , x , y , n , color )
 {
-   console.log(' arrow color ', color);
    //
    changestrokestyle( color );
    changefillstyle ( color );
@@ -633,6 +632,8 @@ function drawcircle( cx, cy, R, color ) {
    changestrokestyle ( color ) ;
    changefillstyle ( color ) ;
    //
+   ctx . beginPath ();
+   //
    ctx . arc ( cx , cy , R , 0 , 2 * M_PI );
    //
    ctx . closePath();
@@ -641,7 +642,7 @@ function drawcircle( cx, cy, R, color ) {
 } 
 //
 function drawshape(j , sx, sy, t, R, color, size_inc ) {
-   if ( j != 0 ) {
+   if ( j == 0 ) {
       drawarrow( sx , sy, t , R , color , size_inc );
    } else {
       drawcircle( sx, sy , R, color );
